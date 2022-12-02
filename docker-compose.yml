@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  backend:
+    container_name: hapijs_mongodb
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/hapijs
+      - ACCESS_TOKEN_SECRET=access_token_secret
+    volumes:
+      - "./src:/app/src"
+      - /app/node_modules
+    networks:
+      - trandung
+  mongo:
+    image: mongo:5.0.5
+    container_name: mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+    networks:
+      - trandung
+volumes:
+  mongodb:
+networks:
+  trandung:
